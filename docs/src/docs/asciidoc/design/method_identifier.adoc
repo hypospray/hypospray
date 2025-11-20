@@ -1,0 +1,15 @@
+= Method Identifier
+
+The method identifier is a string that uniquely identifies a method within a class.
+
+== Format
+
+The method identifier will be constructed based on the method name, parameters and return type and follow the following pattern `methodName[(parameterTypes)returnType]`. The parameter type and return type will use the JVM type descriptor format, so `java.lang.Object` will be `Ljava/lang/Object;`, `void` will be `V`, `int` will be `I` and so on.
+
+For example, for a method `String foo(int i, boolean b)`, the method identifier will be `foo[(IZ)Ljava/lang/String;]`.
+
+== Constructors
+
+For constructors, the keyword "new" will take the place of the method name. The return type will be the name of the class of the constructor. For example, for the constructor `ArrayList<>(int capacity)`, the method identifier would be `"new[(I)Ljava/util/ArrayList]"`.
+
+

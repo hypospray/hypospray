@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.jbeernink</groupId>
+		<artifactId>hypospray</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<groupId>eu.jbeernink.hypospray</groupId>
+	<artifactId>demo</artifactId>
+	<version>${revision}</version>
+	<packaging>jlink</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>eu.jbeernink.hypospray</groupId>
+			<artifactId>eu.jbeernink.hypospray.lite</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jlink-plugin</artifactId>
+				<version>3.2.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<launcher>hypospray-demo=eu.jbeernink.hypospray.demo/eu.jbeernink.hypospray.demo.Demo</launcher>
+					<bindServices>true</bindServices>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

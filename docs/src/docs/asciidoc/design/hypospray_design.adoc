@@ -1,0 +1,18 @@
+= Hypospray
+:doctype: book
+:author: Jan Beernink
+
+Hypospray, a CDI-Lite compatible dependency injection framework.
+
+[preface]
+= Preface
+
+This document aims to provide an overall design for the Hypospray dependency injection framework. This is meant as a living document, any changes in the design (either through refactorings or rewrites), should be reflected in this document.
+
+include::design/internal_datamodel.adoc[]
+
+include::design/proxy.adoc[]
+
+include::design/generated_invokers.adoc[]
+
+include::design/method_identifier.adoc[]

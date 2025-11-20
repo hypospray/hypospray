@@ -1,0 +1,22 @@
+= Internal datamodel
+:doctype: article
+:author: Jan Beernink
+
+Design for the internal data model for Hypospray.
+
+== Datamodel Principles
+
+The internal model for Hypospray will need to adhere to the following principles:
+
+* The internal model needs to be immutable.
+* The internal model should allow running in an environment where reflection may not be available.
+* TODO: What other principles?
+
+For this reason, the internal model will be based around the interfaces defined in the `jakarta.enterprise.lang.model.declarations` package. Hypospray will define new sealed interfaces which extend each of these `*Info` interfaces. Each of these sealed interfaces will have at least two implementations:
+
+* ReflectiveXInfo
+* SyntheticXInfo
+
+The Reflective implementation will be a wrapper around reflection, with potentially some information already extracted. This will allow us to run Hypospray as a normal CDI implementation using reflection at runtime.
+
+The synthetic implementation will not wrap around reflection, but will instead collect the full set of metadata to inspect a subject. The way this will primarily be used is for situations where reflection may not be available. Instead of using reflection, we instead store all the information about a class, method, parameter or field within a module and then have the container load this at runtime instead of scanning archives like would be typical.

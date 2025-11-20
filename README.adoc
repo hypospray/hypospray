@@ -1,0 +1,2 @@
+= Hypospray: A CDI Lite compatible dependency injection framework.
+

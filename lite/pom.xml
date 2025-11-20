@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.jbeernink</groupId>
+		<artifactId>hypospray</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<groupId>eu.jbeernink.hypospray</groupId>
+	<artifactId>eu.jbeernink.hypospray.lite</artifactId>
+	<version>${revision}</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>eu.jbeernink.hypospray</groupId>
+			<artifactId>eu.jbeernink.hypospray.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.codegeneration</groupId>
+			<artifactId>eu.jbeernink.hypospray.codegeneration.classfile</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.discovery</groupId>
+			<artifactId>eu.jbeernink.hypospray.discovery.annotated</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.discovery</groupId>
+			<artifactId>eu.jbeernink.hypospray.discovery.none</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.scope</groupId>
+			<artifactId>eu.jbeernink.hypospray.scope.application</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.scope</groupId>
+			<artifactId>eu.jbeernink.hypospray.scope.request</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

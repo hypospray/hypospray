@@ -1,0 +1,66 @@
+= Generated Invokers
+:doctype: article
+:author: Jan Beernink
+
+In order to avoid reflection, Hypospray will support invokers that are generated either at runtime or at compile time. This design will describe the overall design for generated invokers.
+
+== Invoker factory class
+
+The generated invokers for a class will live in the class in the same package with a name of the form `className\$$hypospray$invokerFactory`. This class will have a public no-args constructor and will implement `Function<String, Invoker<T, ?>>`, where `T` is the type of the original class. The `String` passed to the `apply()` method will be a method identifier string, see <<Method Identifier>> section for details on the format of this string.
+
+The returned invoker will be an invoker for the method that matches the method descriptor string. The invoker will not be bound to a single instance, the exact instance will need to be passed into the invoker's `invoke` method.
+
+The generated invokers will include both static and non-static methods defined on the class.
+
+== Generated invokers
+
+An invoker will be generated for each of the following:
+
+ * any public or package accessible instance methods.
+ * any public or package accessible static methods.
+ * any public or package accessible constructor.
+ * any private observer or producer methods, whether they are instance or static methods.
+ * any private constructors annotated with @Inject.
+
+No invokers will be generated for synthetic methods.
+
+=== Private class members
+
+Generated invokers for any class members will need to use reflection to make the invoked method accessible. As reflection may not be available at runtime in applications that use ahead-of-time compilation (for example, when using GraalVM native image), a warning should be logged whenever an invoker for a private member is invoked. This method will describe the class name and method name and will explain that the invoker might fail if reflection is unavailable.
+
+==== Enabling warning message
+
+By default, the warning message on invoking a private member is disabled. However, if the invokers are generated at build-time, the warning will be enabled. If an application currently uses runtime invoker factory generation, using the `"eu.jbeernink.hypospray.invoker.warnOnPrivateMemberInvocation"` with a value of `true`.
+
+The below example shows how to enable this warning.
+
+[source,java,indent=0]
+----
+include::{baseDir}/src/main/java/eu/jbeernink/hypospray/docs/invoker/Application.java[tag=enableWarning]
+----
+
+==== Disable generating invokers for private members
+
+If instead invokers for private members should be completely disabled, the `"eu.jbeernink.hypospray.invoker.generateForPrivateMembers"` container property should be set to `false`. This will cause any invoker lookup to fail if it is looking up an invoker for a private method. This can be used during testing to find invocations that will fail at runtime if reflection is not available.
+
+[source,java,indent=0]
+----
+include::{baseDir}/src/main/java/eu/jbeernink/hypospray/docs/invoker/Application.java[tag=disablePrivateInvoker]
+----
+== Example
+
+Although this design is lite and does not describe a specific implementation, below is an example implementation for a simple example class.
+
+For the following class:
+
+[source, java]
+----
+include::{baseDir}/src/main/java/eu/jbeernink/hypospray/docs/invoker/ExampleClass.java[]
+----
+
+The invokers class could look like something along the following lines, if written as Java source code:
+
+[source, java]
+----
+include::{baseDir}/src/main/java/eu/jbeernink/hypospray/docs/invoker/ExampleClass$$hypospray$invokerFactory.java[]
+----

@@ -1,0 +1,2 @@
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee" bean-discovery-mode="annotated">
+</beans>

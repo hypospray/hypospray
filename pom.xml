@@ -23,7 +23,8 @@
 		<module>event</module>
 		<module>model</module>
 		<module>invoker</module>
-	</modules>
+        <module>compile</module>
+    </modules>
 
 	<distributionManagement>
 		<repository>

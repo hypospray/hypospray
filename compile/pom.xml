@@ -15,7 +15,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>annotation</module>
 		<module>servicedescriptor</module>
 	</modules>
 

@@ -1,4 +1,4 @@
-package eu.jbeernink.hypospray.compile.annotation;
+package eu.jbeernink.hypospray.annotation.service;
 
 import static java.lang.annotation.ElementType.MODULE;
 import static java.lang.annotation.RetentionPolicy.CLASS;

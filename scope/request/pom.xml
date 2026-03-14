@@ -21,6 +21,12 @@
 
 		<dependency>
 			<groupId>eu.jbeernink.hypospray</groupId>
+			<artifactId>eu.jbeernink.hypospray.annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray</groupId>
 			<artifactId>eu.jbeernink.hypospray.core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -30,6 +36,34 @@
 			<artifactId>eu.jbeernink.hypospray.scope.common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.compile</groupId>
+			<artifactId>eu.jbeernink.hypospray.compile.servicedescriptor</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>eu.jbeernink.hypospray.compile</groupId>
+							<artifactId>eu.jbeernink.hypospray.compile.servicedescriptor</artifactId>
+							<version>${project.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<annotationProcessors>
+						<annotationProcessor>eu.jbeernink.hypospray.compile.servicedescriptor.ServiceDescriptorGenerator
+						</annotationProcessor>
+					</annotationProcessors>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

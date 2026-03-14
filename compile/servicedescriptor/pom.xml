@@ -14,12 +14,4 @@
 	<artifactId>eu.jbeernink.hypospray.compile.servicedescriptor</artifactId>
 	<version>${revision}</version>
 
-	<dependencies>
-		<dependency>
-			<groupId>eu.jbeernink.hypospray.compile</groupId>
-			<artifactId>eu.jbeernink.hypospray.compile.annotation</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
-
 </project>

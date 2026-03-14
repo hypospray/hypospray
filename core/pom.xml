@@ -24,6 +24,13 @@
 			<artifactId>jspecify</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray</groupId>
+			<artifactId>eu.jbeernink.hypospray.annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>eu.jbeernink.hypospray.codegeneration</groupId>
 			<artifactId>eu.jbeernink.hypospray.codegeneration.generator</artifactId>
@@ -62,13 +69,6 @@
 
 		<dependency>
 			<groupId>eu.jbeernink.hypospray.compile</groupId>
-			<artifactId>eu.jbeernink.hypospray.compile.annotation</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>eu.jbeernink.hypospray.compile</groupId>
 			<artifactId>eu.jbeernink.hypospray.compile.servicedescriptor</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
@@ -89,7 +89,8 @@
 						</path>
 					</annotationProcessorPaths>
 					<annotationProcessors>
-						<annotationProcessor>eu.jbeernink.hypospray.compile.servicedescriptor.ServiceDescriptorGenerator</annotationProcessor>
+						<annotationProcessor>eu.jbeernink.hypospray.compile.servicedescriptor.ServiceDescriptorGenerator
+						</annotationProcessor>
 					</annotationProcessors>
 				</configuration>
 			</plugin>

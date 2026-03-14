@@ -3,7 +3,7 @@ import jakarta.enterprise.inject.build.compatible.spi.BuildServices;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 import jakarta.enterprise.inject.spi.CDIProvider;
 
-import eu.jbeernink.hypospray.compile.annotation.GenerateServiceDescriptors;
+import eu.jbeernink.hypospray.annotation.service.GenerateServiceDescriptors;
 import eu.jbeernink.hypospray.core.ContainerBuildServices;
 import eu.jbeernink.hypospray.core.ContainerInitializer;
 import eu.jbeernink.hypospray.core.ContainerProvider;
@@ -17,12 +17,12 @@ import eu.jbeernink.hypospray.invoker.factory.InvokerFactoryManager;
 module eu.jbeernink.hypospray.core {
 	requires jakarta.cdi;
 	requires static jakarta.el;
+	requires eu.jbeernink.hypospray.annotation;
 	requires eu.jbeernink.hypospray.codegeneration.generator;
 	requires eu.jbeernink.hypospray.model;
 	requires eu.jbeernink.hypospray.invoker;
 	requires eu.jbeernink.hypospray.util;
 	requires org.jspecify;
-	requires eu.jbeernink.hypospray.compile.annotation;
 
 	exports eu.jbeernink.hypospray.core.annotation to eu.jbeernink.hypospray.event;
 	exports eu.jbeernink.hypospray.core.event to eu.jbeernink.hypospray.event;

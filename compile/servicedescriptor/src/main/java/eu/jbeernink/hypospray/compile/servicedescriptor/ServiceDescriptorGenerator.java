@@ -17,7 +17,7 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
-@SupportedAnnotationTypes("eu.jbeernink.hypospray.compile.annotation.GenerateServiceDescriptors")
+@SupportedAnnotationTypes("eu.jbeernink.hypospray.annotation.service.GenerateServiceDescriptors")
 public class ServiceDescriptorGenerator extends AbstractProcessor {
 
 	private record Service(TypeElement service, TypeElement implementation) {}
@@ -45,7 +45,7 @@ public class ServiceDescriptorGenerator extends AbstractProcessor {
 			try {
 				FileObject resource = processingEnv.getFiler()
 				                                   .createResource(StandardLocation.CLASS_OUTPUT, "",
-						                                   "META-INF/services/" + service.getQualifiedName().toString());
+						                                   "META-INF/services/" + service.getQualifiedName());
 
 				try (BufferedWriter writer = new BufferedWriter(resource.openWriter())) {
 					for (Service implementation : implementations) {

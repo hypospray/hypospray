@@ -3,15 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
-		<groupId>eu.jbeernink.hypospray</groupId>
-		<artifactId>compile</artifactId>
+		<groupId>eu.jbeernink</groupId>
+		<artifactId>hypospray</artifactId>
 		<version>${revision}</version>
 	</parent>
 
-	<groupId>eu.jbeernink.hypospray.compile</groupId>
-	<artifactId>eu.jbeernink.hypospray.compile.annotation</artifactId>
-	<version>${revision}</version>
-
+	<groupId>eu.jbeernink.hypospray</groupId>
+	<artifactId>eu.jbeernink.hypospray.annotation</artifactId>
+	<version>0.1-SNAPSHOT</version>
 </project>

@@ -24,6 +24,13 @@
 			<artifactId>jspecify</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray</groupId>
+			<artifactId>eu.jbeernink.hypospray.annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>eu.jbeernink.hypospray.codegeneration</groupId>
 			<artifactId>eu.jbeernink.hypospray.codegeneration.generator</artifactId>
@@ -59,10 +66,34 @@
 			<artifactId>junit-jupiter-params</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>eu.jbeernink.hypospray.compile</groupId>
+			<artifactId>eu.jbeernink.hypospray.compile.servicedescriptor</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>eu.jbeernink.hypospray.compile</groupId>
+							<artifactId>eu.jbeernink.hypospray.compile.servicedescriptor</artifactId>
+							<version>${project.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<annotationProcessors>
+						<annotationProcessor>eu.jbeernink.hypospray.compile.servicedescriptor.ServiceDescriptorGenerator
+						</annotationProcessor>
+					</annotationProcessors>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

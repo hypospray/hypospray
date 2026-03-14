@@ -1,11 +1,14 @@
 import org.jspecify.annotations.NullMarked;
 
+import eu.jbeernink.hypospray.annotation.service.GenerateServiceDescriptors;
 import eu.jbeernink.hypospray.model.information.source.ClassInformationSource;
 import eu.jbeernink.hypospray.model.information.source.DefaultClassInformationSource;
 
 @NullMarked
+@GenerateServiceDescriptors
 module eu.jbeernink.hypospray.model {
 	requires transitive jakarta.cdi;
+	requires eu.jbeernink.hypospray.annotation;
 	requires eu.jbeernink.hypospray.invoker;
 	requires eu.jbeernink.hypospray.util;
 	requires org.jspecify;

@@ -4,15 +4,16 @@ on: [ push, pull_request ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        jdk-version: [25, 26]
     steps:
       - uses: actions/checkout@v3
-      - name: 'Set up latest JDK 25 from jdk.java.net'
+      - name: 'Set up latest JDK ${{matrix.jdk-version}} from jdk.java.net'
         uses: actions/setup-java@v5
         with:
-          java-version: 25
+          java-version: ${{matrix.jdk-version}}
           distribution: 'zulu'
       - name: Build with Maven
         run: mvn -B package --file pom.xml

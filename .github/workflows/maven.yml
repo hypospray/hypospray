@@ -13,6 +13,6 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: 25
-          distribution: 'temurin'
+          distribution: 'zulu'
       - name: Build with Maven
         run: mvn -B package --file pom.xml

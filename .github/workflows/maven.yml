@@ -10,7 +10,7 @@ jobs:
         jdk-version: [25, 26]
     steps:
       - uses: actions/checkout@v3
-      - name: 'Set up latest JDK ${{matrix.jdk-version}} from jdk.java.net'
+      - name: 'Set up latest JDK ${{matrix.jdk-version}}'
         uses: actions/setup-java@v5
         with:
           java-version: ${{matrix.jdk-version}}

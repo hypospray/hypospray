@@ -16,6 +16,7 @@ import jakarta.enterprise.inject.literal.InjectLiteral;
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.BeanContainer;
 import jakarta.enterprise.inject.spi.DefinitionException;
+import jakarta.enterprise.invoke.Invoker;
 import jakarta.inject.Named;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,7 @@ import eu.jbeernink.hypospray.core.inject.spi.producer.ClassBeanProducer;
 import eu.jbeernink.hypospray.core.registry.ContainerRegistry;
 import eu.jbeernink.hypospray.core.test.invoker.FakeInvoker;
 import eu.jbeernink.hypospray.core.test.invoker.FakeInvokerFactoryManager;
+import eu.jbeernink.hypospray.invoker.factory.InvokerFactory;
 import eu.jbeernink.hypospray.invoker.factory.NoOpInvoker;
 import eu.jbeernink.hypospray.model.TypeFactory;
 import eu.jbeernink.hypospray.model.information.reflection.ReflectiveAnnotationInformation;
@@ -128,6 +130,7 @@ class ClassBeanProducerFactoryTest {
 		             "eu.jbeernink.hypospray.core.inject.spi.factory.cases.TestClass", exception.getMessage());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	@DisplayName(
 			"createClassBeanProducer(ClassConfiguration<T>) with injectable fields, returns ClassBeanProducer with expected injection points.")
@@ -148,15 +151,22 @@ class ClassBeanProducerFactoryTest {
 
 		ClassBeanProducer<TestClass> classBeanProducer = factory.createClassBeanProducer(classConfiguration);
 
+		InvokerFactory<TestClass> invokerFactory =
+				(InvokerFactory<TestClass>) invokerFactoryManager.getInvokerFactory(TestClass.class.getName());
+		var unqualifiedFieldInformation = new ReflectiveFieldInformation(unqualifiedField);
+		var unqualifiedFieldSetter = (Invoker<TestClass, Void>) (Object) invokerFactory.apply(
+				unqualifiedFieldInformation.syntheticSetterMethodIdentifier());
+		var qualifiedFieldInformation = new ReflectiveFieldInformation(qualifiedField);
+		var qualifiedFieldSetter = (Invoker<TestClass, Void>) (Object) invokerFactory.apply(
+				qualifiedFieldInformation.syntheticSetterMethodIdentifier());
 		assertEquals(new ClassBeanProducer<>(beanContainer,
-				new BeanConstructor<>(invokerFactoryManager.getInvoker(constructor), List.of()), Set.of(
-				new FieldInjectionPoint(typeFactory.of(String.class),
-						Set.of(annotationInformationBuilderFactory.create(Default.class).build()),
-						new ReflectiveFieldInformation(unqualifiedField), new LateReference<>()),
-				new FieldInjectionPoint(typeFactory.ofObject(),
-						Set.of(new ReflectiveAnnotationInformation<>(qualifiedFieldQualifier)),
-						new ReflectiveFieldInformation(qualifiedField), new LateReference<>())), Set.of(), new NoOpInvoker<>(),
-				new NoOpInvoker<>()), classBeanProducer);
+						new BeanConstructor<>(invokerFactoryManager.getInvoker(constructor), List.of()), Set.of(
+						new FieldInjectionPoint(typeFactory.of(String.class),
+								Set.of(annotationInformationBuilderFactory.create(Default.class).build()), unqualifiedFieldInformation,
+								new LateReference<>(), unqualifiedFieldSetter), new FieldInjectionPoint(typeFactory.ofObject(),
+								Set.of(new ReflectiveAnnotationInformation<>(qualifiedFieldQualifier)), qualifiedFieldInformation,
+								new LateReference<>(), qualifiedFieldSetter)), Set.of(), new NoOpInvoker<>(), new NoOpInvoker<>()),
+				classBeanProducer);
 	}
 
 	@Test
@@ -188,7 +198,8 @@ class ClassBeanProducerFactoryTest {
 		var field2SetterInformation = new ReflectiveMethodInformation(field2Setter);
 		var field2InitializationMethod = new InitializerMethod(field2SetterInformation,
 				new FakeInvoker<>(testClassName, "setField2[(Ljava/lang/Object;)V]"), List.of(
-				new MethodInjectionPoint(typeFactory.ofObject(), Set.of(new ReflectiveAnnotationInformation<>(Default.Literal.INSTANCE)),
+				new MethodInjectionPoint(typeFactory.ofObject(),
+						Set.of(new ReflectiveAnnotationInformation<>(Default.Literal.INSTANCE)),
 						field2SetterInformation.parameterInformation().getFirst(), 0, new LateReference<>())));
 		assertEquals(new ClassBeanProducer<>(beanContainer,
 						new BeanConstructor<>(invokerFactoryManager.getInvoker(constructor), List.of()), Set.of(),

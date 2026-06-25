@@ -23,6 +23,7 @@ import eu.jbeernink.hypospray.core.exception.DeploymentException;
 import eu.jbeernink.hypospray.core.inject.build.compatible.spi.AnnotatedConfiguration;
 import eu.jbeernink.hypospray.core.inject.build.compatible.spi.ClassConfiguration;
 import eu.jbeernink.hypospray.core.inject.build.compatible.spi.ConstructorConfiguration;
+import eu.jbeernink.hypospray.core.inject.build.compatible.spi.FieldConfiguration;
 import eu.jbeernink.hypospray.core.inject.build.compatible.spi.MethodConfiguration;
 import eu.jbeernink.hypospray.core.inject.build.compatible.spi.ParameterConfiguration;
 import eu.jbeernink.hypospray.core.inject.spi.ConstructorInjectionPoint;
@@ -94,7 +95,8 @@ public class ClassBeanProducerFactory {
 		                         .filter(field -> !field.info().isStatic())
 		                         .filter(field -> field.hasAnnotation(Inject.class))
 		                         .map(field -> new FieldInjectionPoint(field.info().type(),
-				                         getInjectionPointQualifiers(field), field.info(), new LateReference<>()))
+				                         getInjectionPointQualifiers(field), field.info(), new LateReference<>(),
+				                         getFieldSetter(classConfiguration, field)))
 		                         .collect(toUnmodifiableSet());
 	}
 
@@ -150,6 +152,12 @@ public class ClassBeanProducerFactory {
 		}
 
 		return qualifiers;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Invoker<T, Void> getFieldSetter(ClassConfiguration<T> classConfiguration, FieldConfiguration field) {
+		return (Invoker<T, Void>) invokerFactoryManager.getInvoker(classConfiguration.info().name(),
+				field.info().syntheticSetterMethodIdentifier());
 	}
 
 	private <T> Optional<Invoker<T, Void>> getPostConstructCallbackInvoker(ClassConfiguration<T> classConfiguration) {

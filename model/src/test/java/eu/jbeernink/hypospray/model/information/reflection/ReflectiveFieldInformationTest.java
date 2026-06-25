@@ -173,4 +173,26 @@ class ReflectiveFieldInformationTest {
 			assertEquals(expectedTypeInstance, type);
 		}
 	}
+
+	@Test
+	@DisplayName("syntheticSetterMethodIdentifier() returns the expected method identifier.")
+	void syntheticSetterMethodIdentifier_returnsExpectedMethodIdentifier() throws Exception {
+		Field field = ReflectiveFieldInformationTest.class.getDeclaredField("nonFinalField");
+		var fieldInformation = new ReflectiveFieldInformation(field);
+
+		String methodIdentifier = fieldInformation.syntheticSetterMethodIdentifier();
+
+		assertEquals("nonFinalField$$synthetic$$setter[(Ljava/lang/String;)V]", methodIdentifier);
+	}
+
+	@Test
+	@DisplayName("syntheticGetterMethodIdentifier")
+	void syntheticGetterMethodIdentifier_returnsExpectedMethodIdentifier() throws Exception {
+		Field field = ReflectiveFieldInformationTest.class.getDeclaredField("nonFinalField");
+		var fieldInformation = new ReflectiveFieldInformation(field);
+
+		String methodIdentifier = fieldInformation.syntheticGetterMethodIdentifier();
+
+		assertEquals("nonFinalField$$synthetic$$getter[()Ljava/lang/String;]", methodIdentifier);
+	}
 }

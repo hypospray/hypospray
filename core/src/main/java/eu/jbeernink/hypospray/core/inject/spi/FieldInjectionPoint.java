@@ -5,6 +5,7 @@ import static eu.jbeernink.hypospray.core.todo.Todo.warnNotYetImplemented;
 import java.util.Set;
 
 import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.invoke.Invoker;
 
 import eu.jbeernink.hypospray.model.information.AnnotationInformation;
 import eu.jbeernink.hypospray.model.information.FieldInformation;
@@ -12,7 +13,7 @@ import eu.jbeernink.hypospray.model.reference.LateReference;
 import eu.jbeernink.hypospray.model.types.TypeInstance;
 
 public record FieldInjectionPoint(TypeInstance type, Set<AnnotationInformation> qualifierAnnotations, FieldInformation field,
-                                  LateReference<Bean<?>> managedBeanReference) implements InternalInjectionPoint {
+                                  LateReference<Bean<?>> managedBeanReference, Invoker<?, Void> setter) implements InternalInjectionPoint {
 
 	public FieldInjectionPoint {
 		qualifierAnnotations = Set.copyOf(qualifierAnnotations);

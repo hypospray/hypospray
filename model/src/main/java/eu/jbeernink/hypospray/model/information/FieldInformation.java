@@ -46,4 +46,14 @@ public sealed interface FieldInformation extends FieldInfo, AnnotatedDeclaration
 	TypeInstance type();
 
 	List<AnnotationInformation> annotationInformation();
+
+	/// {@return method identifier for a synthetic setter that sets the value of this field directly}
+	default String syntheticSetterMethodIdentifier() {
+		return "%s$$synthetic$$setter[(%s)V]".formatted(name(), type().descriptorString());
+	}
+
+	/// {@return method identifier for a synthetic getter that reads the value of this field directly}
+	default String syntheticGetterMethodIdentifier() {
+		return "%s$$synthetic$$getter[()%s]".formatted(name(), type().descriptorString());
+	}
 }

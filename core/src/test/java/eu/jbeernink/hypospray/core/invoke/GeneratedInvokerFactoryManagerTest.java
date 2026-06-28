@@ -40,6 +40,19 @@ class GeneratedInvokerFactoryManagerTest {
 	}
 
 	@Test
+	@DisplayName("getInvokerFactory(String className) with a known class name, returns an invoker factory that can generate invokers for setting a field on that class.")
+	void getInvokerFactory_withKnownClassName_returnsInvokerFactoryWhichCanSetFieldsForClass() throws Exception {
+		ClassWithField classWithField = new ClassWithField();
+
+		@SuppressWarnings("unchecked") InvokerFactory<ClassWithField> invokerFactory =
+				(InvokerFactory<ClassWithField>) manager.getInvokerFactory(ClassWithField.class.getName());
+
+		Invoker<ClassWithField, Object> invoker = invokerFactory.create("field$$synthetic$$setter[(Ljava/lang/String;)V]");
+		var _ = invoker.invoke(classWithField, new Object[]{"test"});
+		assertEquals("test", classWithField.field);
+	}
+
+	@Test
 	@DisplayName("getInvokerFactory(String className) with an unknown class name, throws DeploymentException.")
 	void getInvokerFactory_withUnknownClassName_throwsDeploymentException() throws Exception {
 		assertThrows(DeploymentException.class, () -> manager.getInvokerFactory("fake.java.lang.String"));

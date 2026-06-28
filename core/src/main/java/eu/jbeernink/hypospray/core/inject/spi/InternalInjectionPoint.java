@@ -63,7 +63,7 @@ public sealed interface InternalInjectionPoint extends InjectionPoint permits Co
 		return switch (this) {
 			case MethodInjectionPoint(_, _, ReflectiveParameterInformation(Parameter parameter), _, _) ->
 					parameter.getDeclaringExecutable();
-			case FieldInjectionPoint(_, _, ReflectiveFieldInformation(Field field), _) -> field;
+			case FieldInjectionPoint(_, _, ReflectiveFieldInformation(Field field), _, _) -> field;
 			case ConstructorInjectionPoint(_, _, _, ReflectiveParameterInformation(Parameter parameter), _) ->
 					parameter.getDeclaringExecutable();
 		};

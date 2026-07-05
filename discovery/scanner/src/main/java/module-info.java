@@ -10,6 +10,7 @@ module eu.jbeernink.hypospray.discovery.scanner {
 	requires eu.jbeernink.hypospray.annotation;
 	requires eu.jbeernink.hypospray.core;
 	requires eu.jbeernink.hypospray.xml;
+	requires org.jspecify;
 
 	exports eu.jbeernink.hypospray.discovery.scanner;
 

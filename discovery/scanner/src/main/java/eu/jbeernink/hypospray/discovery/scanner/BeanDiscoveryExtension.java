@@ -63,11 +63,16 @@ public class BeanDiscoveryExtension implements BuildCompatibleExtension {
 
 	private static Stream<ModuleReference> getModules() {
 		String modulePath = System.getProperty("jdk.module.path");
-		if (modulePath != null) {
-			return getModulesFromPath(modulePath);
+		if (modulePath != null && !modulePath.isBlank()) {
+			return Stream.concat(getModulesFromPath(modulePath), getBootModules());
 		}
 
-		return ModuleLayer.boot().configuration().modules().stream().map(ResolvedModule::reference);
+		String classPath = System.getProperty("java.class.path");
+		if (classPath != null && !classPath.isBlank()) {
+			return Stream.concat(getModulesFromPath(System.getProperty("java.class.path")), getBootModules());
+		}
+
+		return getBootModules();
 	}
 
 	private Stream<String> findCandidateClasses(ModuleReference beanArchive) {
@@ -183,5 +188,9 @@ public class BeanDiscoveryExtension implements BuildCompatibleExtension {
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+
+	private static Stream<ModuleReference> getBootModules() {
+		return ModuleLayer.boot().configuration().modules().stream().map(ResolvedModule::reference);
 	}
 }

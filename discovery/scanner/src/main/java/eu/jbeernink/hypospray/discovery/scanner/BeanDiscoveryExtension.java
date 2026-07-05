@@ -67,6 +67,10 @@ public class BeanDiscoveryExtension implements BuildCompatibleExtension {
 			return getModulesFromPath(modulePath);
 		}
 
+		if (System.getProperty("java.class.path") != null) {
+			return getModulesFromPath(System.getProperty("java.class.path"));
+		}
+
 		return ModuleLayer.boot().configuration().modules().stream().map(ResolvedModule::reference);
 	}
 

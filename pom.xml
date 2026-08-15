@@ -146,8 +146,9 @@
 							<usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>
 							<usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
 						</statelessTestsetReporter>
-							<systemProperties>
-								<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/test-logging.properties</java.util.logging.config.file>
+						<systemProperties>
+							<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/test-logging.properties
+							</java.util.logging.config.file>
 						</systemProperties>
 					</configuration>
 				</plugin>

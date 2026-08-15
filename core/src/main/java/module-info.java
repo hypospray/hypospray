@@ -27,6 +27,7 @@ module eu.jbeernink.hypospray.core {
 	exports eu.jbeernink.hypospray.core.annotation to eu.jbeernink.hypospray.event;
 	exports eu.jbeernink.hypospray.core.event to eu.jbeernink.hypospray.event;
 	exports eu.jbeernink.hypospray.core.priority to eu.jbeernink.hypospray.event, eu.jbeernink.hypospray.scope.application, eu.jbeernink.hypospray.scope.request, eu.jbeernink.hypospray.discovery.scanner;
+	exports eu.jbeernink.hypospray.core.settings to eu.jbeernink.hypospray.discovery.scanner;
 
 	provides BuildServices with ContainerBuildServices;
 	provides SeContainerInitializer with ContainerInitializer;

@@ -49,6 +49,7 @@ import eu.jbeernink.hypospray.core.inject.spi.producer.StaticInvokerBeanFactory;
 import eu.jbeernink.hypospray.core.inject.spi.producer.SupplierInjectionTarget;
 import eu.jbeernink.hypospray.core.internal.Internal;
 import eu.jbeernink.hypospray.core.registry.ContainerRegistry;
+import eu.jbeernink.hypospray.core.settings.ContainerSettings;
 import eu.jbeernink.hypospray.invoker.factory.NoOpInvoker;
 import eu.jbeernink.hypospray.model.information.ClassInformation;
 import eu.jbeernink.hypospray.model.types.reflection.ParameterizedTypeImpl;
@@ -105,7 +106,7 @@ public class ContainerFactory {
 		try {
 			ContainerProvider.setContainer(container);
 
-			List<ClassInformation<?>> discoveredClasses = performDiscovery(containerRegistry);
+			List<ClassInformation<?>> discoveredClasses = performDiscovery(containerRegistry, containerSettings);
 
 			List<ClassConfiguration<?>> discoveredClassConfigurations =
 					discoveredClasses.stream().map(ClassConfiguration::fromClassInfo).collect(toUnmodifiableList());
@@ -149,13 +150,13 @@ public class ContainerFactory {
 		containerRegistry.registerBean(containerRegistryBean);
 	}
 
-	private List<ClassInformation<?>> performDiscovery(ContainerRegistry containerRegistry) {
+	private List<ClassInformation<?>> performDiscovery(ContainerRegistry containerRegistry, ContainerSettings containerSettings) {
 		var classDiscoverer = new ClassDiscoverer();
 		classDiscoverer.add(InjectableBeanContainer.class);
 		classDiscoverer.add(DummyEventInstance.class);
 
 		var metaAnnotations = new MetaAnnotationRegistry(containerRegistry);
-		extensionManager.discoverClasses(classDiscoverer, metaAnnotations);
+		extensionManager.discoverClasses(classDiscoverer, metaAnnotations, containerSettings);
 
 		return classDiscoverer.getDiscoveredClasses();
 	}

@@ -12,7 +12,7 @@ import jakarta.enterprise.inject.se.SeContainerInitializer;
 import jakarta.enterprise.inject.spi.Extension;
 
 import eu.jbeernink.hypospray.core.factory.ContainerFactory;
-import eu.jbeernink.hypospray.core.factory.ContainerSettings;
+import eu.jbeernink.hypospray.core.settings.ContainerSettings;
 
 /// A container initializer that is used to create [Container] instances.
 public class ContainerInitializer extends SeContainerInitializer {
@@ -115,6 +115,6 @@ public class ContainerInitializer extends SeContainerInitializer {
 
 	@Override
 	public SeContainer initialize() {
-		return ContainerFactory.newInstance().createContainer(new ContainerSettings());
+		return ContainerFactory.newInstance().createContainer(new ContainerSettings(beanDiscoveryEnabled));
 	}
 }

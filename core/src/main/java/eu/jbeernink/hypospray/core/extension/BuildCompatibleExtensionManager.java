@@ -39,6 +39,7 @@ import eu.jbeernink.hypospray.core.inject.build.compatible.spi.BeanInformation;
 import eu.jbeernink.hypospray.core.inject.build.compatible.spi.ClassConfiguration;
 import eu.jbeernink.hypospray.core.inject.spi.builder.SyntheticComponentManager;
 import eu.jbeernink.hypospray.core.messages.ContainerInitializationLogger;
+import eu.jbeernink.hypospray.core.settings.ContainerSettings;
 import eu.jbeernink.hypospray.model.TypeFactory;
 
 public class BuildCompatibleExtensionManager {
@@ -77,9 +78,10 @@ public class BuildCompatibleExtensionManager {
 		this.buildCompatibleExtensions = List.copyOf(buildCompatibleExtensions);
 	}
 
-	public void discoverClasses(ScannedClasses scannedClasses, MetaAnnotations metaAnnotations) {
+	public void discoverClasses(ScannedClasses scannedClasses, MetaAnnotations metaAnnotations,
+	                            ContainerSettings containerSettings) {
 		findMethodsWith(Discovery.class).forEach(extensionMethod -> invokeLifecycleMethod(extensionMethod,
-				List.of(scannedClasses, metaAnnotations, getLogger(extensionMethod.extension))));
+				List.of(scannedClasses, metaAnnotations, containerSettings, getLogger(extensionMethod.extension))));
 	}
 
 	public List<ClassConfiguration<?>> performEnhancement(List<ClassConfiguration<?>> classConfigurations) {

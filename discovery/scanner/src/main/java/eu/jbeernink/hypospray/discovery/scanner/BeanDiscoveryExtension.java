@@ -4,6 +4,8 @@ import static eu.jbeernink.hypospray.core.priority.ExtensionPriority.BEAN_DISCOV
 import static eu.jbeernink.hypospray.discovery.scanner.BeanDiscoveryMode.ALL;
 import static eu.jbeernink.hypospray.discovery.scanner.BeanDiscoveryMode.ANNOTATED;
 import static eu.jbeernink.hypospray.discovery.scanner.BeanDiscoveryMode.NONE;
+import static java.lang.System.Logger.Level.DEBUG;
+import static java.lang.System.Logger.Level.INFO;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 import static java.util.stream.Collectors.toUnmodifiableSet;
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.lang.System.Logger;
 import java.lang.module.ModuleDescriptor;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReader;
@@ -35,11 +38,14 @@ import jakarta.enterprise.inject.build.compatible.spi.Discovery;
 import jakarta.enterprise.inject.build.compatible.spi.ScannedClasses;
 import jakarta.enterprise.inject.spi.DeploymentException;
 
+import eu.jbeernink.hypospray.core.settings.ContainerSettings;
 import eu.jbeernink.hypospray.xml.BeansConfigReader;
 import eu.jbeernink.hypospray.xml.model.BeanConfig;
 
 @Priority(BEAN_DISCOVERY_EXTENSION)
 public class BeanDiscoveryExtension implements BuildCompatibleExtension {
+
+	private static final Logger logger = System.getLogger(BeanDiscoveryExtension.class.getName());
 
 	private final BeanDiscoveryMode DEFAULT_DISCOVERY_MODE = ANNOTATED;
 
@@ -54,25 +60,19 @@ public class BeanDiscoveryExtension implements BuildCompatibleExtension {
 	}
 
 	@Discovery
-	public void discoverBeans(ScannedClasses scannedClasses) {
-		getModules().filter(BeanDiscoveryExtension::isBeanArchive)
-		            .flatMap(this::findCandidateClasses)
-		            .forEach(scannedClasses::add);
+	public void discoverBeans(ScannedClasses scannedClasses, ContainerSettings containerSettings) {
+		if (containerSettings.beanDiscoveryEnabled()) {
+			logger.log(DEBUG, "Starting bean discovery.");
+			getModules().filter(BeanDiscoveryExtension::isBeanArchive)
+			            .flatMap(this::findCandidateClasses)
+			            .forEach(scannedClasses::add);
+		} else {
+			logger.log(INFO, "Bean discovery is disabled.");
+		}
 	}
 
-
 	private static Stream<ModuleReference> getModules() {
-		String modulePath = System.getProperty("jdk.module.path");
-		if (modulePath != null && !modulePath.isBlank()) {
-			return Stream.concat(getModulesFromPath(modulePath), getBootModules());
-		}
-
-		String classPath = System.getProperty("java.class.path");
-		if (classPath != null && !classPath.isBlank()) {
-			return Stream.concat(getModulesFromPath(System.getProperty("java.class.path")), getBootModules());
-		}
-
-		return getBootModules();
+		return Stream.concat(getRuntimeModules(), getBootModules());
 	}
 
 	private Stream<String> findCandidateClasses(ModuleReference beanArchive) {
@@ -90,16 +90,6 @@ public class BeanDiscoveryExtension implements BuildCompatibleExtension {
 		}
 
 		return beanDiscoveryFilters.get(beanDiscoveryMode);
-	}
-
-	private static Stream<ModuleReference> getModulesFromPath(String path) {
-		String rawModulePath = requireNonNull(path);
-		String pathSeparator = requireNonNull(File.pathSeparator);
-		List<Path> modulePathEntries =
-				Arrays.stream(rawModulePath.split(Pattern.quote(pathSeparator))).map(Paths::get).toList();
-		var moduleFinder = ModuleFinder.of(modulePathEntries.toArray(Path[]::new));
-
-		return moduleFinder.findAll().stream();
 	}
 
 	private BeanDiscoveryMode getBeanDiscoveryMode(ModuleReference moduleReference) {
@@ -188,6 +178,22 @@ public class BeanDiscoveryExtension implements BuildCompatibleExtension {
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+
+	private static Stream<ModuleReference> getRuntimeModules() {
+		return Stream.of(System.getProperty("jdk.module.path"), System.getProperty("java.class.path"))
+		             .filter(path -> path != null && !path.isBlank())
+		             .flatMap(BeanDiscoveryExtension::getModulesFromPath);
+	}
+
+	private static Stream<ModuleReference> getModulesFromPath(String path) {
+		String rawModulePath = requireNonNull(path);
+		String pathSeparator = requireNonNull(File.pathSeparator);
+		List<Path> modulePathEntries =
+				Arrays.stream(rawModulePath.split(Pattern.quote(pathSeparator))).map(Paths::get).toList();
+		var moduleFinder = ModuleFinder.of(modulePathEntries.toArray(Path[]::new));
+
+		return moduleFinder.findAll().stream();
 	}
 
 	private static Stream<ModuleReference> getBootModules() {
